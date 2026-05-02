@@ -44,7 +44,7 @@ const register = async (req, res) => {
     try {
         const existingUser = await User.findOne({ username });
         if (existingUser) {
-            return res.status(httpStatus.FOUND).json({ message: "User already exists" });
+           return res.status(httpStatus.CONFLICT).json({ message: "User already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -68,34 +68,58 @@ const register = async (req, res) => {
 
 const getUserHistory = async (req, res) => {
     const { token } = req.query;
+    console.log("TOKEN:", token);
 
     try {
+        // 1. Check token exists
+        if (!token) {
+            return res.status(400).json({ message: "Token is required" });
+        }
+
+        // 2. Find user
         const user = await User.findOne({ token: token });
-        const meetings = await Meeting.find({ user_id: user.username })
-        res.json(meetings)
+
+        // 3. Handle null user (CRITICAL FIX)
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // 4. Get meetings
+        const meetings = await Meeting.find({ user_id: user.username });
+
+        // 5. Return empty array if no data
+        res.status(200).json(meetings || []);
+
     } catch (e) {
-        res.json({ message: `Something went wrong ${e}` })
+        res.status(500).json({ message: `Something went wrong: ${e.message}` });
     }
-}
+};
 
 const addToHistory = async (req, res) => {
     const { token, meeting_code } = req.body;
-
+       console.log("TOKEN:", token);
     try {
-        const user = await User.findOne({ token: token });
+        if (!token) {
+            return res.status(400).json({ message: "Token is required" });
+        }
+
+        const user = await User.findOne({ token });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
 
         const newMeeting = new Meeting({
             user_id: user.username,
             meetingCode: meeting_code
-        })
+        });
 
         await newMeeting.save();
 
-        res.status(httpStatus.CREATED).json({ message: "Added code to history" })
+        res.status(httpStatus.CREATED).json({ message: "Added code to history" });
+
     } catch (e) {
-        res.json({ message: `Something went wrong ${e}` })
+        res.status(500).json({ message: `Something went wrong ${e.message}` });
     }
-}
-
-
+};
 export { login, register, getUserHistory, addToHistory }
