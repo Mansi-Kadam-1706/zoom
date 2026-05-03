@@ -17,11 +17,11 @@ export default function LandingPage() {
                         router("/aljk23")
                     }}>Join as Guest</p>
                     <p onClick={() => {
-                        router("/auth")
+                        router("/auth", { state: { mode: "register" } })
 
                     }}>Register</p>
                     <div onClick={() => {
-                        router("/auth")
+                        router("/auth",{ state: { mode: "login" } })
 
                     }} role='button'>
                         <p>Login</p>
