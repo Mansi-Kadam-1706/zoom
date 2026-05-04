@@ -68,7 +68,7 @@ export default function VideoMeetComponent() {
         console.log("HELLO")
         getPermissions();
 
-    })
+    });
 
     let getDislayMedia = () => {
         if (screen) {
@@ -112,7 +112,8 @@ export default function VideoMeetComponent() {
                 if (userMediaStream) {
                     window.localStream = userMediaStream;
                     if (localVideoref.current) {
-                        localVideoref.current.srcObject = userMediaStream;
+                        localVideoref.current.srcObject = userMediaStream; //localVideoRef = your own video element on screen
+                                                                            //srcObject = attach stream to video element
                     }
                 }
             }

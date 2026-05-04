@@ -1,61 +1,110 @@
 .meetVideoContainer {
     position: relative;
     height: 100vh;
+    width: 100%;
     background: rgb(1, 4, 48);
+    overflow: hidden;
 }
+
+/* ================= BIG VIDEO ================= */
+
+.conferenceView {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: calc(100% - 40px);
+    height: calc(100% - 120px); /* space for buttons */
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* Shrink when chat opens */
+.chatOpen .conferenceView {
+    width: calc(70vw - 40px);
+}
+
+.conferenceView video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* important for boxed look */
+    background: black;
+    border-radius: 12px;
+}
+
+/* ================= SMALL VIDEO ================= */
 
 .meetUserVideo {
     position: absolute;
-    bottom: 10vh;
-    height: 20vh;
-    width: auto;
-    left: 0;
-    border-radius: 20px;
+    bottom: 100px;
+    left: 30px;
+    width: 180px;
+    height: 130px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid white;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
+
+/* ================= BUTTONS ================= */
 
 .buttonContainers {
     position: absolute;
-    width: 100vw;
-    bottom: 0;
-    text-align: center;
+    bottom: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    z-index: 20;
 }
 
 .buttonContainers svg {
-    font-size: 3rem;
+    font-size: 2.5rem;
 }
 
-.conferenceView { 
-
-    display: flex;
-    
-    padding: 10px;
-    gap: 10px;
-}
-
-.conferenceView  video {
-    width: 40vw;
-    height: 20vh;
-    min-width: 30vw;
-    border-radius: 10px;
-}
+/* ================= CHAT ================= */
 
 .chatRoom {
     position: absolute;
-    height: 90vh;
-    right: 0;
-    background: white;
-    border-radius: 10px;
+    top: 20px;
+    right: 20px;
     width: 30vw;
-    padding-inline: 20px;
+    height: calc(100vh - 40px);
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
 }
 
 .chatContainer {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 
+.chattingDisplay {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
 
 .chattingArea {
-    position: absolute;
-    bottom: 0;
+    display: flex;
+    gap: 10px;
+}
+
+/* ================= OPTIONAL SCROLL FIX ================= */
+
+.chattingDisplay::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chattingDisplay::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
 }
